@@ -19,6 +19,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,11 +37,8 @@ public class MainActivity extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
+                Log.i("Info", "changed location");
                 updateLocationInfo(location);
-            }
-
-            private void updateLocationInfo(Location location) {
-
             }
 
             @Override
@@ -115,8 +113,16 @@ public class MainActivity extends AppCompatActivity {
 
         try
         {
+            DecimalFormat df = new DecimalFormat();
+
+            df.setMaximumFractionDigits(3);
+
+            double lat = Double.parseDouble(df.format(location.getLatitude()));
+
+            double lon = Double.parseDouble(df.format(location.getLongitude()));
+
             String address = "Could not find address";
-            List<Address> listAddresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            List<Address> listAddresses = geocoder.getFromLocation(lat, lon, 1);
 
             if (listAddresses != null && listAddresses.size() > 0)
             {
